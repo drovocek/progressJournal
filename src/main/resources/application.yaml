@@ -10,6 +10,9 @@ spring:
         format_sql: true
         default_batch_fetch_size: 20
         jdbc.batch_size: 20
+  messages:
+    basename: messages, config.i18n.messages
+    fallback-to-system-locale: true
 
   datasource:
     # ImMemory
@@ -45,3 +48,5 @@ server.servlet:
     charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
     enabled: true # Enable http encoding support
     force: true
+
+
