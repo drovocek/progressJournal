@@ -1,7 +1,9 @@
 package edu.volkov.progressjournal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.volkov.progressjournal.HasId;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
@@ -9,9 +11,10 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 
 @Getter
+@Setter
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public class AbstractBaseEntity implements Persistable<Integer> {
+public class AbstractBaseEntity implements Persistable<Integer>, HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +24,6 @@ public class AbstractBaseEntity implements Persistable<Integer> {
     @Override
     public boolean isNew() {
         return id == null;
-    }
-
-    public int id() {
-        Assert.notNull(id, "Entity must have id");
-        return id;
     }
 
     @Override
