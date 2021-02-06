@@ -1,4 +1,4 @@
-package edu.volkov.ratingmanager;
+package edu.volkov.progressjournal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

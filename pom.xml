@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>edu.volkov</groupId>
-    <artifactId>ratingmanager</artifactId>
+    <artifactId>progressJournal</artifactId>
     <version>1.0</version>
-    <name>ratingManager</name>
-    <description>Test project for Skillbox</description>
+    <name>progressJournal</name>
+    <description>Student progress journal</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -45,6 +45,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.1.6.Final</version>
         </dependency>
     </dependencies>
 
