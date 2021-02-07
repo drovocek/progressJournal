@@ -2,6 +2,7 @@ package edu.volkov.progressjournal.web;
 
 import edu.volkov.progressjournal.model.Student;
 import edu.volkov.progressjournal.repository.StudentCrudRepository;
+import edu.volkov.progressjournal.util.exception.ErrorType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,11 +25,12 @@ class StudentControllerTest extends AbstractControllerTest {
     private StudentCrudRepository repository;
 
     @Test
-    void create() throws Exception {
+    void createGood() throws Exception {
         Student newStudent = getNew();
         ResultActions action = perform(post(REST_URL)
                 .contentType(APPLICATION_JSON)
-                .content(writeValue(newStudent)));
+                .content(writeValue(newStudent)))
+                .andDo(print());
 
         Student created = readFromJson(action, Student.class);
         int newId = created.id();
@@ -38,18 +40,50 @@ class StudentControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createBad() throws Exception {
+        Student studentWithBadField = new Student();
+        studentWithBadField.setFirstName("");
+        studentWithBadField.setLastName("");
+        studentWithBadField.setPatronymic("");
+
+        perform(post(REST_URL)
+                .contentType(APPLICATION_JSON)
+                .content(writeValue(studentWithBadField)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.VALIDATION_ERROR));
+    }
+
+    @Test
     void update() throws Exception {
         Student updated = getUpdated();
         perform(put(REST_URL + HARRY_ID).contentType(APPLICATION_JSON)
                 .content(writeValue(updated)))
+                .andDo(print())
                 .andExpect(status().isNoContent());
 
         STUDENT_MATCHER.assertMatch(repository.findById(HARRY_ID).orElse(null), updated);
     }
 
     @Test
+    void updateInvalid() throws Exception {
+        Student updatedWithBadFields = new Student();
+        updatedWithBadFields.setId(HARRY_ID);
+        updatedWithBadFields.setFirstName("");
+        updatedWithBadFields.setLastName("");
+        updatedWithBadFields.setPatronymic("");
+
+        perform(put(REST_URL + HARRY_ID).contentType(APPLICATION_JSON)
+                .content(writeValue(updatedWithBadFields)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.VALIDATION_ERROR));
+    }
+
+    @Test
     void deleteGood() throws Exception {
         perform(delete(REST_URL + HARRY_ID))
+                .andDo(print())
                 .andExpect(status().isNoContent());
         System.out.println(repository.findById(HARRY_ID));
 
@@ -59,7 +93,9 @@ class StudentControllerTest extends AbstractControllerTest {
     @Test
     void deleteNotFound() throws Exception {
         perform(delete(REST_URL + NOT_FOUND_ID))
-                .andExpect(status().isUnprocessableEntity());
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.DATA_NOT_FOUND));
     }
 
     @Test
@@ -75,7 +111,8 @@ class StudentControllerTest extends AbstractControllerTest {
     void getNotFound() throws Exception {
         perform(get(REST_URL + NOT_FOUND_ID))
                 .andDo(print())
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.DATA_NOT_FOUND));
     }
 
     @Test
