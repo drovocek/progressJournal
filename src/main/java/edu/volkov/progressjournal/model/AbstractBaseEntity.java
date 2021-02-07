@@ -2,16 +2,19 @@ package edu.volkov.progressjournal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.volkov.progressjournal.HasId;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @MappedSuperclass
 @Access(AccessType.FIELD)
 public class AbstractBaseEntity implements Persistable<Integer>, HasId {

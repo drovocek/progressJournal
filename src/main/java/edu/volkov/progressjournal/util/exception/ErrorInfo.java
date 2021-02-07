@@ -1,5 +1,10 @@
 package edu.volkov.progressjournal.util.exception;
 
+import lombok.Getter;
+import lombok.ToString;
+
+@ToString
+@Getter
 public class ErrorInfo {
     private final String url;
     private final ErrorType type;

@@ -32,4 +32,10 @@ public class Student extends AbstractBaseEntity {
     @Column(name = "patronymic")
     private String patronymic;
 
+    public Student(Integer harryId, String firstName, String lastName, String patronymic) {
+        super(harryId);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.patronymic = patronymic;
+    }
 }

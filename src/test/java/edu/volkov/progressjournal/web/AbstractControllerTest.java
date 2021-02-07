@@ -4,7 +4,6 @@ import edu.volkov.progressjournal.util.exception.ErrorType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.core.env.Environment;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @Sql(scripts = "classpath:testData.sql", config = @SqlConfig(encoding = "UTF-8"))
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public abstract class AbstractControllerTest {
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
 
@@ -33,9 +32,6 @@ public abstract class AbstractControllerTest {
     }
 
     private MockMvc mockMvc;
-
-    @Autowired
-    public Environment env;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
