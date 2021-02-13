@@ -28,6 +28,7 @@ class StudentControllerTest extends AbstractControllerTest {
     @Test
     void create() throws Exception {
         Student newStudent = getNew();
+
         ResultActions action = perform(post(REST_URL)
                 .contentType(APPLICATION_JSON)
                 .content(writeValue(newStudent)))
@@ -36,6 +37,7 @@ class StudentControllerTest extends AbstractControllerTest {
         Student created = readFromJson(action, Student.class);
         int newId = created.id();
         newStudent.setId(newId);
+
         STUDENT_MATCHER.assertMatch(created, newStudent);
         STUDENT_MATCHER.assertMatch(repository.findById(newId).orElse(null), newStudent);
     }
@@ -58,6 +60,7 @@ class StudentControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Student updated = getUpdated();
+
         perform(put(REST_URL + HARRY_ID).contentType(APPLICATION_JSON)
                 .content(writeValue(updated)))
                 .andDo(print())

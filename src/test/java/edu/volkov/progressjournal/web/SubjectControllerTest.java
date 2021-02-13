@@ -28,6 +28,7 @@ class SubjectControllerTest extends AbstractControllerTest {
     @Test
     void create() throws Exception {
         Subject newSubject = getNew();
+
         ResultActions action = perform(post(REST_URL)
                 .contentType(APPLICATION_JSON)
                 .content(writeValue(newSubject)))
@@ -36,6 +37,7 @@ class SubjectControllerTest extends AbstractControllerTest {
         Subject created = readFromJson(action, Subject.class);
         int newId = created.id();
         newSubject.setId(newId);
+
         SUBJECT_MATCHER.assertMatch(created, newSubject);
         SUBJECT_MATCHER.assertMatch(repository.findById(newId).orElse(null), newSubject);
     }
@@ -56,6 +58,7 @@ class SubjectControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Subject updated = getUpdated();
+
         perform(put(REST_URL + ASTRONOMY_ID).contentType(APPLICATION_JSON)
                 .content(writeValue(updated)))
                 .andDo(print())

@@ -5,7 +5,6 @@ import edu.volkov.progressjournal.model.Subject;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class SubjectTestData {
     public static final TestMatcher<Subject> SUBJECT_MATCHER = TestMatcher.usingEqualsComparator(Subject.class);
 

@@ -9,7 +9,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import java.util.Locale;
 
 @Configuration
-public class BaseConfig {
+public class MessageConfig {
 
     @Bean(name = "messageSource")
     public ReloadableResourceBundleMessageSource getMessageSource() {

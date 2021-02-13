@@ -9,5 +9,4 @@ public class ProgressJournalApplication {
     public static void main(String[] args) {
         SpringApplication.run(ProgressJournalApplication.class, args);
     }
-
 }

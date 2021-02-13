@@ -2,12 +2,10 @@ package edu.volkov.progressjournal;
 
 import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.BiConsumer;
 
+import static edu.volkov.progressjournal.TestUtil.readListFromJsonMvcResult;
 import static org.assertj.core.api.Assertions.assertThat;
-import static edu.volkov.progressjournal.TestUtil.*;
 
 public class TestMatcher<T> {
     private final Class<T> clazz;
@@ -20,29 +18,14 @@ public class TestMatcher<T> {
         this.iterableAssertion = iterableAssertion;
     }
 
-    public static <T> TestMatcher<T> usingAssertions(Class<T> clazz, BiConsumer<T, T> assertion, BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion) {
-        return new TestMatcher<>(clazz, assertion, iterableAssertion);
-    }
-
     public static <T> TestMatcher<T> usingEqualsComparator(Class<T> clazz) {
         return new TestMatcher<>(clazz,
                 (a, e) -> assertThat(a).isEqualTo(e),
                 (a, e) -> assertThat(a).isEqualTo(e));
     }
 
-    public static <T> TestMatcher<T> usingIgnoringFieldsComparator(Class<T> clazz, String... fieldsToIgnore) {
-        return new TestMatcher<>(clazz,
-                (a, e) -> assertThat(a).usingRecursiveComparison().ignoringFields(fieldsToIgnore).isEqualTo(e),
-                (a, e) -> assertThat(a).usingElementComparatorIgnoringFields(fieldsToIgnore).isEqualTo(e));
-    }
-
     public void assertMatch(T actual, T expected) {
         assertion.accept(actual, expected);
-    }
-
-    @SafeVarargs
-    public final void assertMatch(Iterable<T> actual, T... expected) {
-        assertMatch(actual, Arrays.asList(expected));
     }
 
     public void assertMatch(Iterable<T> actual, Iterable<T> expected) {

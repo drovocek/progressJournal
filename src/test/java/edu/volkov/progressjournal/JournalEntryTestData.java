@@ -26,7 +26,6 @@ public class JournalEntryTestData {
     public static final JournalEntry ENTRY_5 = new JournalEntry(ENTRY_1_ID + 4, 7, TODAY, HERMIONE, HERBOLOGY);
     public static final JournalEntry ENTRY_6 = new JournalEntry(ENTRY_1_ID + 5, 8, TOMORROW, HERMIONE, MAGICAL_THEORY);
 
-
     public static final List<JournalEntry> journalEntryes = Arrays.asList(ENTRY_1, ENTRY_2, ENTRY_3, ENTRY_4, ENTRY_5, ENTRY_6);
 
     public static JournalEntry getNew() {
