@@ -23,5 +23,4 @@ public class JournalEntryTo implements HasId {
     public boolean isNew() {
         return id == null;
     }
-
 }

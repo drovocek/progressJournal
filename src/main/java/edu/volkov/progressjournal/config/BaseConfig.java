@@ -15,8 +15,8 @@ public class BaseConfig {
     public ReloadableResourceBundleMessageSource getMessageSource() {
         final ReloadableResourceBundleMessageSource res = new ReloadableResourceBundleMessageSource();
         res.setDefaultEncoding("UTF-8");
-        res.setFallbackToSystemLocale(false); // will force to use specified locale even if locale for current env is different
-        res.addBasenames("classpath:messages", "classpath:messages/app");
+        res.setFallbackToSystemLocale(false);
+        res.addBasenames("classpath:messages/app");
         return res;
     }
 

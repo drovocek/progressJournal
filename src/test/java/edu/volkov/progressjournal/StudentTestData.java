@@ -1,10 +1,9 @@
-package edu.volkov.util.data;
+package edu.volkov.progressjournal;
 
 import edu.volkov.progressjournal.model.Student;
 
 import java.util.Arrays;
 import java.util.List;
-
 
 public class StudentTestData {
     public static final TestMatcher<Student> STUDENT_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Student.class);

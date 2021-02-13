@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 public interface StudentCrudRepository extends JpaRepository<Student, Integer> {
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Student s WHERE s.id=:id")

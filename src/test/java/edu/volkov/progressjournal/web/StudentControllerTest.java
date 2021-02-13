@@ -8,9 +8,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static edu.volkov.progressjournal.util.exception.ErrorType.DATA_NOT_FOUND;
 import static edu.volkov.progressjournal.util.exception.ErrorType.VALIDATION_ERROR;
-import static edu.volkov.util.data.StudentTestData.*;
-import static edu.volkov.util.data.TestUtil.readFromJson;
-import static edu.volkov.util.data.json.JsonUtil.writeValue;
+import static edu.volkov.progressjournal.StudentTestData.*;
+import static edu.volkov.progressjournal.TestUtil.readFromJson;
+import static edu.volkov.progressjournal.JsonUtil.writeValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,14 +42,14 @@ class StudentControllerTest extends AbstractControllerTest {
 
     @Test
     void createInvalid() throws Exception {
-        Student studentWithBadField = new Student();
-        studentWithBadField.setFirstName("");
-        studentWithBadField.setLastName("");
-        studentWithBadField.setPatronymic("");
+        Student invalid = new Student();
+        invalid.setFirstName("");
+        invalid.setLastName("");
+        invalid.setPatronymic("");
 
         perform(post(REST_URL)
                 .contentType(APPLICATION_JSON)
-                .content(writeValue(studentWithBadField)))
+                .content(writeValue(invalid)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(VALIDATION_ERROR));
@@ -68,14 +68,14 @@ class StudentControllerTest extends AbstractControllerTest {
 
     @Test
     void updateInvalid() throws Exception {
-        Student updatedWithBadFields = new Student();
-        updatedWithBadFields.setId(HARRY_ID);
-        updatedWithBadFields.setFirstName("");
-        updatedWithBadFields.setLastName("");
-        updatedWithBadFields.setPatronymic("");
+        Student invalid = new Student();
+        invalid.setId(HARRY_ID);
+        invalid.setFirstName("");
+        invalid.setLastName("");
+        invalid.setPatronymic("");
 
         perform(put(REST_URL + HARRY_ID).contentType(APPLICATION_JSON)
-                .content(writeValue(updatedWithBadFields)))
+                .content(writeValue(invalid)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(VALIDATION_ERROR));
@@ -98,7 +98,6 @@ class StudentControllerTest extends AbstractControllerTest {
         perform(delete(REST_URL + HARRY_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        System.out.println(repository.findById(HARRY_ID));
 
         assertNull(repository.findById(HARRY_ID).orElse(null));
     }

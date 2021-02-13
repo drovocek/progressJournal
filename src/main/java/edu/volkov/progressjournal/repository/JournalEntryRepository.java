@@ -44,5 +44,4 @@ public class JournalEntryRepository {
         constructed.setMarkDate(journalEntryTo.getMarkDate());
         return constructed;
     }
-
 }

@@ -1,4 +1,4 @@
-package edu.volkov.util.data.json;
+package edu.volkov.progressjournal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

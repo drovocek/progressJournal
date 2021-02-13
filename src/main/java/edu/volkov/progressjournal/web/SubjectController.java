@@ -1,5 +1,6 @@
 package edu.volkov.progressjournal.web;
 
+import edu.volkov.progressjournal.View;
 import edu.volkov.progressjournal.model.Subject;
 import edu.volkov.progressjournal.repository.SubjectCrudRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,7 +27,7 @@ public class SubjectController {
     private final SubjectCrudRepository repository;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Subject> create(@RequestBody Subject subject) {
+    public ResponseEntity<Subject> create(@Validated(View.Web.class) @RequestBody Subject subject) {
         log.info("create {}", subject);
         checkNew(subject);
         Subject created = repository.save(subject);
@@ -39,7 +41,7 @@ public class SubjectController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Subject subject, @PathVariable int id) {
+    public void update(@Validated(View.Web.class) @RequestBody Subject subject, @PathVariable int id) {
         log.info("update {} with id {}", subject, id);
         assureIdConsistent(subject, id);
         checkNotFoundWithId(repository.save(subject), subject.id());

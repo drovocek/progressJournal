@@ -1,4 +1,4 @@
-package edu.volkov.util.data;
+package edu.volkov.progressjournal;
 
 import org.springframework.test.web.servlet.ResultMatcher;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static edu.volkov.util.data.TestUtil.*;
+import static edu.volkov.progressjournal.TestUtil.*;
 
 public class TestMatcher<T> {
     private final Class<T> clazz;

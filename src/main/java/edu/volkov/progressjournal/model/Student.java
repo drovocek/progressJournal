@@ -46,8 +46,8 @@ public class Student extends AbstractBaseEntity {
         this.patronymic = student.getPatronymic();
     }
 
-    public Student(Integer harryId, String firstName, String lastName, String patronymic) {
-        super(harryId);
+    public Student(Integer id, String firstName, String lastName, String patronymic) {
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
