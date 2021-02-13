@@ -1,5 +1,6 @@
 package edu.volkov.progressjournal;
 
+import edu.volkov.progressjournal.web.json.JsonUtil;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 

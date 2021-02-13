@@ -1,8 +1,7 @@
-package edu.volkov.progressjournal;
+package edu.volkov.progressjournal.web.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
 import java.io.IOException;
@@ -10,11 +9,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static edu.volkov.progressjournal.web.json.JacksonObjectMapper.getMapper;
+
 public class JsonUtil {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static <T> List<T> readValues(String json, Class<T> clazz) {
-        ObjectReader reader = MAPPER.readerFor(clazz);
+        ObjectReader reader = getMapper().readerFor(clazz);
         try {
             return reader.<T>readValues(json).readAll();
         } catch (IOException e) {
@@ -24,7 +24,7 @@ public class JsonUtil {
 
     public static <T> T readValue(String json, Class<T> clazz) {
         try {
-            return MAPPER.readValue(json, clazz);
+            return getMapper().readValue(json, clazz);
         } catch (IOException e) {
             throw new IllegalArgumentException("Invalid read from JSON:\n'" + json + "'", e);
         }
@@ -32,7 +32,7 @@ public class JsonUtil {
 
     public static <T> String writeValue(T obj) {
         try {
-            return MAPPER.writeValueAsString(obj);
+            return getMapper().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Invalid write to JSON:\n'" + obj + "'", e);
         }
@@ -43,7 +43,7 @@ public class JsonUtil {
     }
 
     public static <T> String writeAdditionProps(T obj, Map<String, Object> addProps) {
-        Map<String, Object> map = MAPPER.convertValue(obj, new TypeReference<Map<String, Object>>() {
+        Map<String, Object> map = getMapper().convertValue(obj, new TypeReference<Map<String, Object>>() {
         });
         map.putAll(addProps);
         return writeValue(map);

@@ -37,11 +37,12 @@ public class JournalEntryRepository {
     }
 
     public JournalEntry constructFromTo(JournalEntryTo journalEntryTo) {
-        JournalEntry constructed = new JournalEntry();
-        constructed.setStudent(studentCrudRepository.getOne(journalEntryTo.getStudentId()));
-        constructed.setSubject(subjectCrudRepository.getOne(journalEntryTo.getSubjectId()));
-        constructed.setMark(journalEntryTo.getMark());
-        constructed.setMarkDate(journalEntryTo.getMarkDate());
-        return constructed;
+        return new JournalEntry(
+                journalEntryTo.getId(),
+                journalEntryTo.getMark(),
+                journalEntryTo.getMarkDate(),
+                studentCrudRepository.getOne(journalEntryTo.getStudentId()),
+                subjectCrudRepository.getOne(journalEntryTo.getSubjectId())
+        );
     }
 }

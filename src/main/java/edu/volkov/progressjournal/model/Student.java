@@ -1,7 +1,12 @@
 package edu.volkov.progressjournal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.volkov.progressjournal.View;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.Column;
@@ -12,13 +17,13 @@ import javax.validation.constraints.Size;
 
 import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 
-@ToString
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "student")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Student extends AbstractBaseEntity {
 
     @SafeHtml(groups = {View.Web.class}, whitelistType = NONE)
@@ -39,6 +44,9 @@ public class Student extends AbstractBaseEntity {
     @Column(name = "patronymic")
     private String patronymic;
 
+    @Formula("(SELECT AVG(je.mark) FROM Journal_Entry je WHERE je.student_id=id)")
+    private Integer averageRating;
+
     public Student(Student student) {
         super(student.getId());
         this.firstName = student.getFirstName();
@@ -51,5 +59,19 @@ public class Student extends AbstractBaseEntity {
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
+    }
+
+    public Integer getAverageRating() {
+        return (averageRating == null) ? 0 : averageRating;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                '}';
     }
 }

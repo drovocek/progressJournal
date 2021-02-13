@@ -1,7 +1,11 @@
 package edu.volkov.progressjournal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import edu.volkov.progressjournal.View;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.Column;
@@ -12,13 +16,13 @@ import javax.validation.constraints.Size;
 
 import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
 
-@ToString
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "subject")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Subject extends AbstractBaseEntity {
 
     @SafeHtml(groups = {View.Web.class}, whitelistType = NONE)
@@ -35,5 +39,13 @@ public class Subject extends AbstractBaseEntity {
     public Subject(Subject subject) {
         super(subject.getId());
         this.name = subject.getName();
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

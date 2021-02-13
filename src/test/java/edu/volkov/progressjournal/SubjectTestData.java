@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public class SubjectTestData {
-    public static final TestMatcher<Subject> SUBJECT_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Subject.class);
+    public static final TestMatcher<Subject> SUBJECT_MATCHER = TestMatcher.usingEqualsComparator(Subject.class);
 
     public static final int NOT_FOUND_ID = 10;
     public static final int ASTRONOMY_ID = 0;

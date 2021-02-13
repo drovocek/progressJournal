@@ -1,7 +1,12 @@
 package edu.volkov.progressjournal.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import edu.volkov.progressjournal.View;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -11,13 +16,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@ToString
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "journal_entry")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class JournalEntry extends AbstractBaseEntity {
 
     @Column(name = "mark", nullable = false)
@@ -26,20 +31,56 @@ public class JournalEntry extends AbstractBaseEntity {
     private Integer mark;
 
     @NotNull
-    @Column(name = "mark_date", nullable = false, columnDefinition = "date default now()")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDate markDate = LocalDate.now();
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @Column(name = "mark_date", nullable = false)
+    private LocalDate markDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subject_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
-    private Subject subject;
-
+    @NotNull(groups = View.Persist.class)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
+    @NotNull(groups = View.Persist.class)
     private Student student;
 
+    @NotNull(groups = View.Persist.class)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subject_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull(groups = View.Persist.class)
+    private Subject subject;
+
+    public JournalEntry(Integer id, Integer mark, LocalDate markDate) {
+        super(id);
+        this.mark = mark;
+        this.markDate = markDate;
+    }
+
+    public JournalEntry(Integer id, Integer mark, LocalDate markDate, Student student, Subject subject) {
+        super(id);
+        this.mark = mark;
+        this.markDate = markDate;
+        this.student = student;
+        this.subject = subject;
+    }
+
+    public JournalEntry(JournalEntry journalEntry) {
+        super(journalEntry.getId());
+        this.mark = journalEntry.getMark();
+        this.markDate = journalEntry.getMarkDate();
+        this.student = journalEntry.getStudent();
+        this.subject = journalEntry.getSubject();
+    }
+
+    @Override
+    public String toString() {
+        return "JournalEntry{" +
+                "id=" + id +
+                ", mark=" + mark +
+                ", markDate=" + markDate +
+                ", student=" + student +
+                ", subject=" + subject +
+                '}';
+    }
 }

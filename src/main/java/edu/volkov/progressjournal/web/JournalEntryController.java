@@ -1,5 +1,6 @@
 package edu.volkov.progressjournal.web;
 
+import edu.volkov.progressjournal.View;
 import edu.volkov.progressjournal.model.JournalEntry;
 import edu.volkov.progressjournal.repository.JournalEntryRepository;
 import edu.volkov.progressjournal.to.JournalEntryTo;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,7 +28,7 @@ public class JournalEntryController {
     private final JournalEntryRepository repository;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<JournalEntry> create(@RequestBody JournalEntryTo journalEntryTo) {
+    public ResponseEntity<JournalEntry> create(@Validated(View.Web.class) @RequestBody JournalEntryTo journalEntryTo) {
         log.info("create {}", journalEntryTo);
         checkNew(journalEntryTo);
         JournalEntry created = repository.save(journalEntryTo);
@@ -40,7 +42,7 @@ public class JournalEntryController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody JournalEntryTo journalEntryTo, @PathVariable int id) {
+    public void update(@Validated(View.Web.class) @RequestBody JournalEntryTo journalEntryTo, @PathVariable int id) {
         log.info("update {} with id {}", journalEntryTo, id);
         assureIdConsistent(journalEntryTo, id);
         checkNotFoundWithId(repository.save(journalEntryTo), journalEntryTo.id());
@@ -64,5 +66,4 @@ public class JournalEntryController {
         log.info("getAll journalEntryes");
         return repository.getAll();
     }
-
 }

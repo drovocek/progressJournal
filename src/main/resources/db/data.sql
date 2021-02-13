@@ -14,7 +14,7 @@ ALTER TABLE JOURNAL_ENTRY
 
 INSERT INTO STUDENT (ID, FIRST_NAME, LAST_NAME, PATRONYMIC)
 VALUES (0, 'Harry', 'Potter', 'Jamesovich'),
-       (1, 'Hermione', 'Granger', 'Hogusovich'),
+       (1, 'Hermione', 'Granger', 'Hogusovna'),
        (2, 'Ronald', 'Weasley', 'Arturovich');
 
 INSERT INTO SUBJECT (ID, NAME)

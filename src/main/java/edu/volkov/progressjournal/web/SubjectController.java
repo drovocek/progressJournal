@@ -65,5 +65,4 @@ public class SubjectController {
         log.info("getAll students");
         return repository.findAll();
     }
-
 }
