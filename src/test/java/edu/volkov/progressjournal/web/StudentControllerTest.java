@@ -2,11 +2,12 @@ package edu.volkov.progressjournal.web;
 
 import edu.volkov.progressjournal.model.Student;
 import edu.volkov.progressjournal.repository.StudentCrudRepository;
-import edu.volkov.progressjournal.util.exception.ErrorType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static edu.volkov.progressjournal.util.exception.ErrorType.DATA_NOT_FOUND;
+import static edu.volkov.progressjournal.util.exception.ErrorType.VALIDATION_ERROR;
 import static edu.volkov.util.data.StudentTestData.*;
 import static edu.volkov.util.data.TestUtil.readFromJson;
 import static edu.volkov.util.data.json.JsonUtil.writeValue;
@@ -25,7 +26,7 @@ class StudentControllerTest extends AbstractControllerTest {
     private StudentCrudRepository repository;
 
     @Test
-    void createGood() throws Exception {
+    void create() throws Exception {
         Student newStudent = getNew();
         ResultActions action = perform(post(REST_URL)
                 .contentType(APPLICATION_JSON)
@@ -40,7 +41,7 @@ class StudentControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createBad() throws Exception {
+    void createInvalid() throws Exception {
         Student studentWithBadField = new Student();
         studentWithBadField.setFirstName("");
         studentWithBadField.setLastName("");
@@ -51,7 +52,7 @@ class StudentControllerTest extends AbstractControllerTest {
                 .content(writeValue(studentWithBadField)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorType(ErrorType.VALIDATION_ERROR));
+                .andExpect(errorType(VALIDATION_ERROR));
     }
 
     @Test
@@ -77,7 +78,19 @@ class StudentControllerTest extends AbstractControllerTest {
                 .content(writeValue(updatedWithBadFields)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorType(ErrorType.VALIDATION_ERROR));
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
+    @Test
+    void updateHtmlUnsafe() throws Exception {
+        Student updated = new Student(HARRY);
+        updated.setFirstName("<script>alert(123)</script>");
+
+        perform(put(REST_URL + HARRY_ID)
+                .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR));
     }
 
     @Test
@@ -95,7 +108,7 @@ class StudentControllerTest extends AbstractControllerTest {
         perform(delete(REST_URL + NOT_FOUND_ID))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorType(ErrorType.DATA_NOT_FOUND));
+                .andExpect(errorType(DATA_NOT_FOUND));
     }
 
     @Test
@@ -112,7 +125,7 @@ class StudentControllerTest extends AbstractControllerTest {
         perform(get(REST_URL + NOT_FOUND_ID))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorType(ErrorType.DATA_NOT_FOUND));
+                .andExpect(errorType(DATA_NOT_FOUND));
     }
 
     @Test

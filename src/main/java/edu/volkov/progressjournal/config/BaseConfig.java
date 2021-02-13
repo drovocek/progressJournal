@@ -16,12 +16,12 @@ public class BaseConfig {
         final ReloadableResourceBundleMessageSource res = new ReloadableResourceBundleMessageSource();
         res.setDefaultEncoding("UTF-8");
         res.setFallbackToSystemLocale(false); // will force to use specified locale even if locale for current env is different
-        res.addBasenames("classpath:messages/validation", "classpath:messages/messages", "classpath:messages/titles");
+        res.addBasenames("classpath:messages", "classpath:messages/app");
         return res;
     }
 
     @Bean
     public MessageSourceAccessor getMessageSourceAccessor(final MessageSource messageSource) {
-        return new MessageSourceAccessor(messageSource, Locale.US);
+        return new MessageSourceAccessor(messageSource, Locale.getDefault());
     }
 }
