@@ -44,14 +44,12 @@ public class JournalEntry extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull(groups = View.Persist.class)
     private Student student;
 
     @NotNull(groups = View.Persist.class)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subject_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull(groups = View.Persist.class)
     private Subject subject;
 
     public JournalEntry(Integer id, Integer mark, LocalDate markDate) {

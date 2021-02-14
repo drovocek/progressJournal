@@ -36,6 +36,7 @@ public class JournalEntryRepository {
         return journalEntryCrudRepository.findAll();
     }
 
+    @Transactional
     public JournalEntry constructFromTo(JournalEntryTo journalEntryTo) {
         return new JournalEntry(
                 journalEntryTo.getId(),

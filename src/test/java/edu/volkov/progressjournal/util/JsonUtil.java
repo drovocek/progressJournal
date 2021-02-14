@@ -1,4 +1,4 @@
-package edu.volkov.progressjournal.web.json;
+package edu.volkov.progressjournal.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import java.io.IOException;
 import java.util.List;
 
-import static edu.volkov.progressjournal.web.json.JacksonObjectMapper.getMapper;
+import static edu.volkov.progressjournal.util.JacksonObjectMapper.getMapper;
 
 public class JsonUtil {
 

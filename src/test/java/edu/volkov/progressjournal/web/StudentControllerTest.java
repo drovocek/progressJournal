@@ -10,7 +10,7 @@ import static edu.volkov.progressjournal.util.exception.ErrorType.DATA_NOT_FOUND
 import static edu.volkov.progressjournal.util.exception.ErrorType.VALIDATION_ERROR;
 import static edu.volkov.progressjournal.StudentTestData.*;
 import static edu.volkov.progressjournal.TestUtil.readFromJson;
-import static edu.volkov.progressjournal.web.json.JsonUtil.writeValue;
+import static edu.volkov.progressjournal.util.JsonUtil.writeValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

@@ -1,4 +1,4 @@
-package edu.volkov.progressjournal.web.json;
+package edu.volkov.progressjournal.util;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
