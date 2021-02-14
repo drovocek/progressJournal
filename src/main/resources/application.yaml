@@ -46,4 +46,7 @@ server.servlet:
     enabled: true # Enable http encoding support
     force: true
 
-
+springdoc:
+  swagger-ui:
+    path: /appdoc.html
+    operationsSorter: method

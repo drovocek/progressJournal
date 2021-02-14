@@ -1,6 +1,7 @@
 package edu.volkov.progressjournal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.volkov.progressjournal.View;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class Student extends AbstractBaseEntity {
     @Column(name = "patronymic")
     private String patronymic;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Formula("(SELECT AVG(je.mark) FROM Journal_Entry je WHERE je.student_id=id)")
     private Integer averageRating;
 
