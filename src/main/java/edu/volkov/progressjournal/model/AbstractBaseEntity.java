@@ -1,6 +1,7 @@
 package edu.volkov.progressjournal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.volkov.progressjournal.HasId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
