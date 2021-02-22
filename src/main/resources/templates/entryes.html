@@ -5,72 +5,90 @@
     <th location="WEB-INF/pages/js/" mapping="/js/**"/>
     <base th:href="@{pageContext.request.contextPath}"/>
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/> <!--+-->
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!--+-->
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+          crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"> <!--+-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css"/> <!--+-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <title>App View</title>
 </head>
+
 <body>
 <div class="jumbotron pt-4">
     <div class="container">
         <div class="row">
-            <div class="col-md-7">
-                <table id="datatable" class="display" width="100%"></table>
-            </div>
+            <table id="datatable" class="table">
+                <caption>List of marks</caption>
+                <thead class="table-dark">
+            </table>
+
+            <button type="button" id="add" class="btn btn-primary btn-circle btn-sm"
+                    data-toggle="collapse" data-target="#collapseExample"
+                    aria-expanded="false" aria-controls="collapseExample">
+                <i class="fa fa-plus"></i>
+            </button>
+
             <div id="detailsGroup" class="col-md-4 col-md-offset-1">
-                <h3 class="text-center" id="formTitle">Add mark</h3>
-                <form id="detailsForm">
-                    <div class="form-group">
-                        <input type="hidden" id="objId" name="id" class="form-control">
+                <div class="collapse" id="collapseExample">
+                    <h3 class="text-center" id="formTitle">Add</h3>
+                    <form id="detailsForm">
+                        <div class="mb-3">
+                            <input type="hidden" id="objId" name="id" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <select name="subjectId" class="form-select" id="subjectId"
+                                    aria-label="Default select example">
+                                <option value="" disabled selected>Subjects</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <select name="studentId" class="form-select" id="studentId"
+                                    aria-label="Default select example">
+                                <option value="" disabled selected>Students</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <select name="mark" class="form-select" id="mark" aria-label="Default select example">
+                                <option value="" disabled selected>Mark</option>
+                                <option value="10">10</option>
+                                <option value="9">9</option>
+                                <option value="8">8</option>
+                                <option value="7">7</option>
+                                <option value="5">5</option>
+                                <option value="4">4</option>
+                                <option value="3">3</option>
+                                <option value="2">2</option>
+                                <option value="1">1</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <input type="date" name="markDate" id="markDate" class="form-control">
+                        </div>
+                    </form>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-success btn-sm" id="save">Create</button>
+                        <button type="button" class="btn btn-light btn-sm" id="clear">Clear</button>
+                        <button type="button" class="btn btn-danger btn-sm float-end" id="delete" style="display:none">
+                            Delete
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <select name="subjectId" class="form-select" id="subjectId"
-                                aria-label="Default select example">
-                            <option value="" disabled selected>Subjects</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <select name="studentId" class="form-select" id="studentId"
-                                aria-label="Default select example">
-                            <option value="" disabled selected>Students</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <select name="mark" class="form-select" id="mark" aria-label="Default select example">
-                            <option value="" disabled selected>Mark</option>
-                            <option value="10">10</option>
-                            <option value="9">9</option>
-                            <option value="8">8</option>
-                            <option value="7">7</option>
-                            <option value="5">5</option>
-                            <option value="4">4</option>
-                            <option value="3">3</option>
-                            <option value="2">2</option>
-                            <option value="1">1</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="date" name="markDate" id="markDate" class="form-control">
-                    </div>
-                </form>
-                <div class="form-group">
-                    <button class="btn btn-success" id="formButton">Create</button>
-                    <button class="btn btn-default" id="clear">Clear</button>
-                    <button class="btn btn-danger pull-right" id="delete" style="display:none">Delete</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/3.1.1/jquery.serializejson.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js" defer></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
 
-<script type="text/javascript" th:src="@{/js/common.js}"></script>
-<script type="text/javascript" th:src="@{/js/entryes.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/3.1.1/jquery.serializejson.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js" defer></script>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/entryes.js}"></script>
 </body>
 </html>

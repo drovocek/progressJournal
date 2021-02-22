@@ -1,5 +1,5 @@
-const subjAjaxUrl = "psjournal/subjects/";
-const studAjaxUrl = "psjournal/students/";
+// const subjAjaxUrl = "psjournal/subjects/";
+// const studAjaxUrl = "psjournal/students/";
 
 const concatFields = {
     stud: ['lastName', 'firstName', 'patronymic'],
@@ -11,15 +11,35 @@ const ctx = {
     updateTable: () => {
         ajaxApi.getAll(ctx.ajaxUrl)
             .done(updateTableByData);
-    }
+    },
+    checkboxData: [
+        {
+            url: 'psjournal/students/',
+            concatFields: ['lastName', 'firstName', 'patronymic'],
+            id: '#studentId'
+        },
+        {
+            url: 'psjournal/subjects/',
+            concatFields: ['name'],
+            id: '#subjectId'
+        },
+    ]
 };
 
 $(function () {
     makeEditable({
         "columns": [
             {
-                "title": "id",
+                "title": "entryId",
                 "data": "id"
+            },
+            {
+                "title": "studentId",
+                "data": "student.id"
+            },
+            {
+                "title": "subjectId",
+                "data": "subject.id"
             },
             {
                 "title": "First Name",
@@ -54,44 +74,10 @@ $(function () {
         ],
         columnDefs: [
             {
-                targets: [0],
+                targets: [0, 1, 2],
                 visible: false,
                 searchable: false
             }
         ],
     });
 });
-
-function getDataMap(ajaxUrl, concatFields) {
-    let JSON = ajaxApi.getAll(ajaxUrl).responseJSON;
-    return jsonToMap(JSON, concatFields);
-}
-
-function jsonToMap(JSON, concatFields) {
-    let map = new Map();
-    for (obj of JSON) {
-        let value = "";
-        concatFields.forEach(field => value = value.concat(obj[field] + " "));
-        value.trim();
-        map.set(obj.id, value);
-    }
-    return map;
-}
-
-function addOptToSelect(dataMap, selectId) {
-    let select = document.getElementById(selectId);
-    // while (select.childNodes.length > 3) {
-    //     select.removeChild(select.lastChild);
-    // }
-    select.childNodes.forEach(el => el.re);
-    dataMap.forEach(function (value, key) {
-        let opt = document.createElement('option');
-        opt.value = key;
-        opt.innerHTML = value;
-        select.appendChild(opt);
-    });
-}
-
-addOptToSelect(getDataMap(studAjaxUrl, concatFields.stud), 'studentId');
-addOptToSelect(getDataMap(subjAjaxUrl, concatFields.subj), 'subjectId');
-

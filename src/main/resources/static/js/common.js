@@ -1,5 +1,6 @@
 const ajaxApi = {
     get: (ajaxUrl) => {
+        console.log("<< get() >>");//LOG
         let id = $('#objId').val();
         return $.ajax({
             url: ajaxUrl + id,
@@ -7,6 +8,7 @@ const ajaxApi = {
         });
     },
     getAll(ajaxUrl) {
+        console.log("<< getAll() >>");//LOG
         return $.ajax({
             type: "GET",
             url: ajaxUrl,
@@ -14,84 +16,43 @@ const ajaxApi = {
         });
     },
     delete: (ajaxUrl) => {
+        console.log("<< delete() >>");//LOG
         if (confirm("Delete")) {
             let id = $('#objId').val();
             $.ajax({
                 url: ajaxUrl.concat(id),
                 type: "DELETE"
             }).done(function () {
+                $('.collapse').collapse("toggle");
                 ctx.updateTable();
+                formApi.printAddBtn();
                 successNoty("Delete done!");
             });
         }
     },
     createOrUpdate: (ajaxUrl) => {
         {
+            console.log("<< createOrUpdate() >>");//LOG
             let id = $('#objId').val();
-            let hasId = (typeof id !== undefined);
-            console.log("ajaxUrl: " + ajaxUrl);
+            let hasId = (id !== "");
             $.ajax({
                 type: hasId ? "PUT" : "POST",
                 url: ajaxUrl.concat(hasId ? id : ""),
                 dataType: "json",
                 contentType: "application/json",
-                data: buildRequestBody()
+                data: formApi.buildRequestBody()
             }).done(function () {
-                // $("#editRow").modal("hide");
+                $('.collapse').collapse("toggle");
                 ctx.updateTable();
+                formApi.printAddBtn();
                 successNoty(hasId ? "Update done!" : "Save done!");
             });
         }
     },
 }
 
-const formApi = {
-    clearForm() {
-        console.log("<< clearForm() >>");//LOG
-        $(".selected").removeClass("selected");
-        $("#detailsForm").find(":input").val("");
-        // viewApi.drawFormDetails(false);
-    },
-    fillForm() {
-        console.log("<< fillForm() >>");//LOG
-        const dataSet = ctx.datatableApi.rows(".selected").data()[0];
-        //
-        // dataSet.id
-        // dataSet.student.firstName
-        // dataSet.student.lastName
-        // dataSet.student.patronymic
-        // dataSet.subject.name
-        // dataSet.name
-
-        $('#objId').val(dataSet.id);
-        // $('#subjectId').val(dataSet.student.firstName);
-        // $('#studentId').val(dataSet.student.lastName);
-        // $('#mark').val(dataSet.phoneNumber);
-        // $('#markDate').val(dataSet.email);
-
-        // $('select option:eq(0)').prop('selected',true)
-
-        // this.drawFormDetails(true);
-    },
-    // drawFormDetails(isForUpdate) {
-    //     console.log("<< drawFormDetails() >>");//LOG
-    //
-    //     const formBtn = $("#formButton");
-    //     const deleteBtn = $("#delete");
-    //     const formTitle = $("#formTitle");
-    //
-    //     formBtn.removeClass((isForUpdate) ? "btn btn-success" : "btn btn-warning")
-    //         .addClass((isForUpdate) ? "btn btn-warning" : "btn btn-success")
-    //         .html((isForUpdate) ? "Update" : "Create");
-    //
-    //     formTitle.html((isForUpdate) ? "Update User" : "Create User");
-    //
-    //     (isForUpdate) ? deleteBtn.show() : deleteBtn.hide();
-    // },
-}
-
 function makeEditable(datatableOpts) {
-    ctx.datatableApi = $("#datatable").DataTable(
+    ctx.datatable = $("#datatable").DataTable(
         // https://api.jquery.com/jquery.extend/#jQuery-extend-deep-target-object1-objectN
         $.extend(true, datatableOpts,
             {
@@ -99,35 +60,133 @@ function makeEditable(datatableOpts) {
                     "url": ctx.ajaxUrl,
                     "dataSrc": ""
                 },
-                "paging": false,
-                "info": true
+                "paging": true,
+                "info": true,
+                "responsive": true
             }
         ));
 
-    $('#formButton').on("click", () => ajaxApi.createOrUpdate(ctx.ajaxUrl));
-    $('#delete').on("click", () => ajaxApi.delete(ctx.ajaxUrl));
+    ctx.checkboxData.forEach(checkbox => {
+        addOptToSelect(getDataMap(checkbox.url, checkbox.concatFields), checkbox.id);
+    })
+
+    $('#add').on("click", formApi.addNew);
     $('#clear').on("click", formApi.clearForm);
-    $('#datatable tbody').on("click", "tr", viewApi.selectRow);
+    $('#save').on("click", () => ajaxApi.createOrUpdate(ctx.ajaxUrl));
+    $('#delete').on("click", () => ajaxApi.delete(ctx.ajaxUrl));
+    $('#datatable tbody').on("click", "tr", tableApi.selectRow);
 }
 
-const viewApi = {
-    selectRow() {
-        console.log("<< selectRow() >>");//LOG
-
-        if ($(this).hasClass("selected")) {
-            $(this).removeClass("selected");
-            $('#detailsGroup').hide();
+const formApi = {
+    addNew() {
+        console.log("<< addNew() >>");//LOG
+        if (!$('#add').hasClass('collapsed')) {
+            formApi.clearForm();
+            formApi.drawFormDetails();
+        }
+        formApi.printAddBtn();
+        ctx.datatable.$('tr.selected').removeClass('selected');
+    },
+    printAddBtn() {
+        if (!$('#add').hasClass('collapsed')) {
+            $('#add').removeClass('btn-primary');
+            $('#add').addClass('btn-warning');
+            $('#add').html('<i class="fa fa-minus"></i>');
         } else {
-            ctx.datatableApi.$("tr.selected").removeClass("selected");
-            $(this).addClass("selected");
-            $('#detailsGroup').show();
-            formApi.fillForm();
+            $('#add').removeClass('btn-warning');
+            $('#add').addClass('btn-primary');
+            $('#add').html('<i class="fa fa-plus"></i>');
         }
     },
+    clearForm() {
+        console.log("<< clearForm() >>");//LOG
+        $(".selected").removeClass("selected");
+        $('#objId').val("");
+        $("#detailsForm").find(":input").val("");
+    },
+    fillForm() {
+        console.log("<< fillForm() >>");//LOG
+        const dataSet = ctx.datatable.rows(".selected").data()[0];
+        $('#objId').val(dataSet.id);
+        $('#subjectId option[value="' + dataSet.subject.id + '"]').prop('selected', true);
+        $('#studentId option[value="' + dataSet.student.id + '"]').prop('selected', true);
+        $('#mark option[value="' + dataSet.mark + '"]').prop('selected', true);
+        $('#markDate').val(dataSet.markDate);
+    },
+    drawFormDetails() {
+        console.log("<< drawFormDetails() >>");//LOG
+        let hasId = ($('#objId').val() !== "");
+
+        $("#formTitle").html((hasId) ? "Update" : "Create");
+        $("#save")
+            .removeClass((hasId) ? "btn btn-success" : "btn btn-warning")
+            .addClass((hasId) ? "btn btn-warning" : "btn btn-success")
+            .html((hasId) ? "Update" : "Add");
+
+        (hasId) ? $("#delete").show() : $("#delete").hide();
+    },
+    buildRequestBody() {
+        console.log("<< buildRequestBody() >> ");//LOG
+        const formData = JSON.stringify($("#detailsForm").serializeJSON());
+        console.log("requestBody: " + formData);//LOG
+        return formData;
+    },
+
+}
+
+const tableApi = {
+    selectRow() {
+        console.log("<< selectRow() >>");//LOG
+        if ($(this).hasClass("selected")) {
+            if ($('.collapse').hasClass('show')) {
+                $('.collapse').collapse("toggle");
+            }
+            $(this).removeClass("selected");
+        } else {
+            ctx.datatable.$("tr.selected").removeClass("selected");
+            $(this).addClass("selected");
+            formApi.fillForm();
+            formApi.drawFormDetails();
+            if (!$('.collapse').hasClass('show')) {
+                $('.collapse').collapse("toggle");
+            }
+        }
+        formApi.printAddBtn();
+    },
+
 }
 
 function updateTableByData(data) {
-    ctx.datatableApi.clear().rows.add(data).draw();
+    console.log("<< updateTableByData() >>");//LOG
+    ctx.datatable.clear().rows.add(data).draw();
+}
+
+function getDataMap(ajaxUrl, concatFields) {
+    console.log("<< getDataMap() >>");//LOG
+    let JSON = ajaxApi.getAll(ajaxUrl).responseJSON;
+    return jsonToMap(JSON, concatFields);
+}
+
+function jsonToMap(JSON, concatFields) {
+    console.log("<< jsonToMap() >>");//LOG
+    let map = new Map();
+    for (obj of JSON) {
+        let value = "";
+        concatFields.forEach(field => value = value.concat(obj[field] + " "));
+        value.trim();
+        map.set(obj.id, value);
+    }
+    return map;
+}
+
+function addOptToSelect(dataMap, selectId) {
+    console.log("<< addOptToSelect() >>");//LOG
+    dataMap.forEach(function (value, key) {
+        let opt = document.createElement('option');
+        opt.value = key;
+        opt.innerHTML = value;
+        $(selectId).append(opt);
+    });
 }
 
 let failedNote;
@@ -151,24 +210,12 @@ function successNoty(key) {
 
 function failNoty(jqXHR) {
     closeNoty();
-    console.log("failNoty()");
     var errorInfo = $.parseJSON(jqXHR.responseText);
-    console.log(errorInfo);
-    console.log(jqXHR);
-    console.log("type: " + errorInfo.type);
-    console.log("detail: " + errorInfo.detail);
     failedNote = new Noty({
         text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + errorInfo.typeMessage + "<br>" + errorInfo.details.join("<br>"),
         type: "error",
         layout: "bottomRight"
     }).show();
-}
-
-function buildRequestBody() {
-    console.log("<< buildRequestBody() >> ");//LOG
-    const formData = JSON.stringify($("#detailsForm").serializeJSON());
-    console.log("requestBody: " + formData);//LOG
-    return formData;
 }
 
 $(document).ajaxError(function (event, jqXHR, options, jsExc) {
