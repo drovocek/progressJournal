@@ -17,19 +17,21 @@ spring:
     suffix: .html
   datasource:
     # ImMemory
-    url: jdbc:h2:mem:progressjournal
-    username: sa
-    password:
-    schema: classpath:/db/shema.sql
-    data: classpath:/db/data.sql
-  h2.console.enabled: true
+#    url: jdbc:h2:mem:progressjournal
+#    username: sa
+#    password:
+#    schema: classpath:/db/shema.sql
+#    data: classpath:/db/data.sql
+#  h2.console.enabled: true
 
     #Heroku deploy
-    #    initialization-mode: always
-    #    platform: postgres
-    #    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost/userapp}
-    #    username: ${SPRING_DATASOURCE_USERNAME:user}
-    #    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    initialization-mode: always
+    platform: postgres
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost/psjournal}
+    username: ${SPRING_DATASOURCE_USERNAME:user}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    schema: classpath:/db/shema.sql
+    data: classpath:/db/data.sql
 
   data.rest:
     #  https://docs.spring.io/spring-data/rest/docs/current/reference/html/#getting-started.basic-settings
