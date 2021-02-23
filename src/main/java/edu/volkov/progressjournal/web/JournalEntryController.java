@@ -24,7 +24,7 @@ import static edu.volkov.progressjournal.util.ValidationUtil.*;
 @RequestMapping(value = JournalEntryController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class JournalEntryController {
 
-    static final String REST_URL = "/psjournal/entryes";
+    static final String REST_URL = "/entryes";
     private final JournalEntryRepository repository;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -1,33 +1,32 @@
 // const subjAjaxUrl = "psjournal/subjects/";
 // const studAjaxUrl = "psjournal/students/";
 
-const concatFields = {
-    stud: ['lastName', 'firstName', 'patronymic'],
-    subj: ['name'],
-};
-
 const ctx = {
-    ajaxUrl: "psjournal/entryes/",
+    ajaxUrl: "../entryes",
     updateTable: () => {
         ajaxApi.getAll(ctx.ajaxUrl)
             .done(updateTableByData);
     },
+    fillForm: (dataSet) => {
+        $('#objId').val(dataSet.id);
+        $('#subjectId option[value="' + dataSet.subject.id + '"]').prop('selected', true);
+        $('#studentId option[value="' + dataSet.student.id + '"]').prop('selected', true);
+        $('#mark option[value="' + dataSet.mark + '"]').prop('selected', true);
+        $('#markDate').val(dataSet.markDate);
+    },
     checkboxData: [
         {
-            url: 'psjournal/students/',
+            url: '../students',
             concatFields: ['lastName', 'firstName', 'patronymic'],
             id: '#studentId'
         },
         {
-            url: 'psjournal/subjects/',
+            url: '../subjects',
             concatFields: ['name'],
             id: '#subjectId'
         },
-    ]
-};
-
-$(function () {
-    makeEditable({
+    ],
+    datatableOpts: {
         "columns": [
             {
                 "title": "entryId",
@@ -79,5 +78,11 @@ $(function () {
                 searchable: false
             }
         ],
-    });
+    }
+};
+
+$(function () {
+    makeEditable(ctx.datatableOpts);
 });
+
+$('#marksTab').addClass('active');

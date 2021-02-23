@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="eng">
+
+<head th:insert="fragments/parts.html :: head"></head>
+
+<body>
+
+<header th:insert="fragments/parts.html :: header"></header>
+
+<div class="jumbotron pt-4">
+    <div class="container">
+        <div class="row">
+            <table id="datatable" class="table">
+                <thead class="table-dark">
+            </table>
+
+            <button type="button" id="add" class="btn btn-primary btn-circle btn-sm"
+                    data-toggle="collapse" data-target="#collapseForm"
+                    aria-expanded="false" aria-controls="collapseForm">
+                <i class="fa fa-plus"></i>
+            </button>
+
+            <div id="detailsGroup" class="col-md-4 col-md-offset-1">
+                <div class="collapse" id="collapseForm">
+                    <h3 class="text-center" id="formTitle">Add</h3>
+                    <form id="detailsForm">
+                        <div class="mb-3">
+                            <input type="hidden" id="objId" name="id" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName" class="col-form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="col-form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName">
+                        </div>
+                        <div class="form-group">
+                            <label for="patronymic" class="col-form-label">Patronymic</label>
+                            <input type="text" class="form-control" id="patronymic" name="patronymic">
+                        </div>
+                    </form>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-success btn-sm" id="save">Create</button>
+                        <button type="button" class="btn btn-light btn-sm" id="clear">Clear</button>
+                        <button type="button" class="btn btn-danger btn-sm float-end" id="delete" style="display:none">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:insert="fragments/parts.html :: footer"></footer>
+
+<script th:src="@{/js/students.js}"></script>
+</body>
+</html>

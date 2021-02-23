@@ -12,7 +12,6 @@ const ajaxApi = {
         return $.ajax({
             type: "GET",
             url: ajaxUrl,
-            async: false
         });
     },
     delete: (ajaxUrl) => {
@@ -20,7 +19,7 @@ const ajaxApi = {
         if (confirm("Delete")) {
             let id = $('#objId').val();
             $.ajax({
-                url: ajaxUrl.concat(id),
+                url: ajaxUrl.concat("/", id),
                 type: "DELETE"
             }).done(function () {
                 $('.collapse').collapse("toggle");
@@ -36,7 +35,7 @@ const ajaxApi = {
             let hasId = (id !== "");
             $.ajax({
                 type: hasId ? "PUT" : "POST",
-                url: ajaxUrl.concat(hasId ? id : ""),
+                url: ajaxUrl.concat("/", hasId ? id : ""),
                 dataType: "json",
                 contentType: "application/json",
                 data: formApi.buildRequestBody()
@@ -64,15 +63,22 @@ function makeEditable(datatableOpts) {
             }
         ));
 
+    console.log(ctx.checkboxData);
     ctx.checkboxData.forEach(checkbox => {
-        addOptToSelect(getDataMap(checkbox.url, checkbox.concatFields), checkbox.id);
-    })
+        console.log("checkbox");
+        addOptToSelect(checkbox);
+    });
 
     $('#add').on("click", formApi.addNew);
     $('#clear').on("click", formApi.clearForm);
     $('#save').on("click", () => ajaxApi.createOrUpdate(ctx.ajaxUrl));
     $('#delete').on("click", () => ajaxApi.delete(ctx.ajaxUrl));
     $('#datatable tbody').on("click", "tr", tableApi.selectRow);
+
+    $(document).ajaxError(function (event, jqXHR, options, jsExc) {
+        failNoty(jqXHR);
+    });
+    $.ajaxSetup({cache: false});
 }
 
 const formApi = {
@@ -105,11 +111,7 @@ const formApi = {
     fillForm() {
         console.log("<< fillForm() >>");//LOG
         const dataSet = ctx.datatable.rows(".selected").data()[0];
-        $('#objId').val(dataSet.id);
-        $('#subjectId option[value="' + dataSet.subject.id + '"]').prop('selected', true);
-        $('#studentId option[value="' + dataSet.student.id + '"]').prop('selected', true);
-        $('#mark option[value="' + dataSet.mark + '"]').prop('selected', true);
-        $('#markDate').val(dataSet.markDate);
+        ctx.fillForm(dataSet);
     },
     drawFormDetails() {
         console.log("<< drawFormDetails() >>");//LOG
@@ -129,7 +131,6 @@ const formApi = {
         console.log("requestBody: " + formData);//LOG
         return formData;
     },
-
 }
 
 const tableApi = {
@@ -151,6 +152,7 @@ const tableApi = {
                 $('#collapseForm').collapse("toggle");
             }
         }
+
         formApi.printAddBtn();
     },
 
@@ -158,14 +160,8 @@ const tableApi = {
 
 function updateTableByData(data) {
     console.log("<< updateTableByData() >>");//LOG
-    formApi.printAddBtn();
     ctx.datatable.clear().rows.add(data).draw();
-}
-
-function getDataMap(ajaxUrl, concatFields) {
-    console.log("<< getDataMap() >>");//LOG
-    let JSON = ajaxApi.getAll(ajaxUrl).responseJSON;
-    return jsonToMap(JSON, concatFields);
+    formApi.printAddBtn();
 }
 
 function jsonToMap(JSON, concatFields) {
@@ -180,13 +176,17 @@ function jsonToMap(JSON, concatFields) {
     return map;
 }
 
-function addOptToSelect(dataMap, selectId) {
+function addOptToSelect(checkbox) {
     console.log("<< addOptToSelect() >>");//LOG
-    dataMap.forEach(function (value, key) {
-        let opt = document.createElement('option');
-        opt.value = key;
-        opt.innerHTML = value;
-        $(selectId).append(opt);
+
+    ajaxApi.getAll(checkbox.url).done(function (data) {
+        let dataMap = jsonToMap(data, checkbox.concatFields);
+        dataMap.forEach(function (value, key) {
+            let opt = document.createElement('option');
+            opt.value = key;
+            opt.innerHTML = value;
+            $(checkbox.id).append(opt);
+        });
     });
 }
 
@@ -218,11 +218,6 @@ function failNoty(jqXHR) {
         layout: "bottomRight"
     }).show();
 }
-
-$(document).ajaxError(function (event, jqXHR, options, jsExc) {
-    failNoty(jqXHR);
-});
-$.ajaxSetup({cache: false});
 
 // function renderEditBtn(data, type, row) {
 //     if (type === "display") {
