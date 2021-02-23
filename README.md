@@ -1,6 +1,7 @@
 # Test task
 Test task for Skillbox
 Student progress journal
+:link: [**DEMO**](https://psjournal.herokuapp.com/)
 
 ## Completion date 
 :heavy_check_mark: 14 February 2021
