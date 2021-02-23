@@ -25,7 +25,6 @@ const ajaxApi = {
             }).done(function () {
                 $('.collapse').collapse("toggle");
                 ctx.updateTable();
-                formApi.printAddBtn();
                 successNoty("Delete done!");
             });
         }
@@ -43,8 +42,7 @@ const ajaxApi = {
                 data: formApi.buildRequestBody()
             }).done(function () {
                 $('.collapse').collapse("toggle");
-                ctx.updateTable();
-                formApi.printAddBtn();
+                ctx.updateTable()
                 successNoty(hasId ? "Update done!" : "Save done!");
             });
         }
@@ -138,8 +136,9 @@ const tableApi = {
     selectRow() {
         console.log("<< selectRow() >>");//LOG
         if ($(this).hasClass("selected")) {
-            if ($('.collapse').hasClass('show')) {
-                $('.collapse').collapse("toggle");
+            if ($('#collapseForm').hasClass('show')) {
+                $('#add').addClass('collapsed');
+                $('#collapseForm').collapse("toggle");
             }
             $(this).removeClass("selected");
         } else {
@@ -147,8 +146,9 @@ const tableApi = {
             $(this).addClass("selected");
             formApi.fillForm();
             formApi.drawFormDetails();
-            if (!$('.collapse').hasClass('show')) {
-                $('.collapse').collapse("toggle");
+            if (!$('#collapseForm').hasClass('show')) {
+                $('#add').removeClass('collapsed');
+                $('#collapseForm').collapse("toggle");
             }
         }
         formApi.printAddBtn();
@@ -158,6 +158,7 @@ const tableApi = {
 
 function updateTableByData(data) {
     console.log("<< updateTableByData() >>");//LOG
+    formApi.printAddBtn();
     ctx.datatable.clear().rows.add(data).draw();
 }
 
