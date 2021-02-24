@@ -27,7 +27,7 @@ spring:
     #Heroku deploy
     initialization-mode: always
     platform: postgres
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost/psjournal}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost}
     username: ${SPRING_DATASOURCE_USERNAME:user}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
     schema: classpath:/db/shema.sql
