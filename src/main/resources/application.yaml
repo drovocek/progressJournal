@@ -1,6 +1,7 @@
 #  https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 spring:
   jpa:
+    generate-ddl: true
     show-sql: true
     open-in-view: false
     hibernate:
@@ -10,6 +11,9 @@ spring:
         format_sql: true
         default_batch_fetch_size: 20
         jdbc.batch_size: 20
+        jdbc:
+          lob:
+            non_contextual_creation: true
   thymeleaf:
     cache: false
     enabled: true
