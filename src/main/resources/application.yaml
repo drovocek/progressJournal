@@ -2,7 +2,7 @@
 spring:
   jpa:
     show-sql: true
-#    open-in-view: false
+    open-in-view: false
     hibernate:
       ddl-auto: none
     properties:
@@ -16,7 +16,7 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
   datasource:
-    # ImMemory
+#    # ImMemory
 #    url: jdbc:h2:mem:progressjournal
 #    username: sa
 #    password:
