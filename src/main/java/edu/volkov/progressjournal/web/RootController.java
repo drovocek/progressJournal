@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/psjournal")
+@RequestMapping("/")
 @Slf4j
 public class RootController {
 
     @GetMapping("")
     public String root() {
         log.info("root()");
-        return "redirect:/psjournal/entryes";
+        return "redirect:/entryes";
     }
 
     @GetMapping("/entryes")

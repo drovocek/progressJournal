@@ -2,7 +2,7 @@
 
 $('#statisticTab').addClass('active');
 
-ajaxApi.getAll("../students").done(function (data) {
+ajaxApi.getAll("/psjournal/students").done(function (data) {
     let dataX = [];
     let dataY = [];
 

@@ -1,5 +1,5 @@
 const ctx = {
-    ajaxUrl: "../subjects",
+    ajaxUrl: "/psjournal/subjects",
     updateTable: () => {
         ajaxApi.getAll(ctx.ajaxUrl)
             .done(updateTableByData);

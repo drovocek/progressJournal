@@ -1,8 +1,5 @@
-// const subjAjaxUrl = "psjournal/subjects/";
-// const studAjaxUrl = "psjournal/students/";
-
 const ctx = {
-    ajaxUrl: "../entryes",
+    ajaxUrl: "/psjournal/entryes",
     updateTable: () => {
         ajaxApi.getAll(ctx.ajaxUrl)
             .done(updateTableByData);
@@ -16,12 +13,12 @@ const ctx = {
     },
     checkboxData: [
         {
-            url: '../students',
+            url: '/psjournal/students',
             concatFields: ['lastName', 'firstName', 'patronymic'],
             id: '#studentId'
         },
         {
-            url: '../subjects',
+            url: '/psjournal/subjects',
             concatFields: ['name'],
             id: '#subjectId'
         },

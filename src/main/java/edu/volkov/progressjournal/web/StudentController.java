@@ -23,7 +23,7 @@ import static edu.volkov.progressjournal.util.ValidationUtil.*;
 @RequestMapping(value = StudentController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class StudentController {
 
-    static final String REST_URL = "/students";
+    static final String REST_URL = "/psjournal/students";
     private final StudentCrudRepository repository;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
