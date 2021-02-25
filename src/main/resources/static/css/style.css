@@ -28,3 +28,9 @@ body {
     font-size: 8px;
     text-align: center;
 }
+
+.dataTables_filter {
+    padding: 5px;
+}
+
+
