@@ -1,6 +1,8 @@
 # Test task
 Test task for Skillbox
+
 Student progress journal
+
 :link: [**DEMO**](https://psjournal.herokuapp.com/)
 
 ## Completion date 
