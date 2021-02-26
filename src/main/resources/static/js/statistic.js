@@ -5,46 +5,56 @@ $('#statisticTab').addClass('active');
 ajaxApi.getAll("/psjournal/students").done(function (data) {
     let dataX = [];
     let dataY = [];
-
-    console.log(data);
+    let dataAvgLine = [];
 
     data.forEach(obj => {
         dataX.push(obj.lastName + " " + obj.firstName + " " + obj.patronymic);
         dataY.push(obj.averageRating);
     });
 
-    console.log(dataX);
-    console.log(dataY);
+    let count = 0;
+    let sum = 0;
+    dataY.forEach(x => {
+        count++;
+        sum += x;
+    });
+    while (dataAvgLine.length < count) {
+        dataAvgLine.push(sum / count);
+    }
 
-    createChart(dataX, dataY);
+    createChart(dataX, dataY, dataAvgLine);
 });
 
-function createChart(dataX, dataY) {
+function createChart(dataX, dataY, dataAvgLine) {
     'use strict'
-
     feather.replace();
-
     // Graphs
     let chartEl = document.getElementById('myChart');
-    // eslint-disable-next-line no-unused-vars
+
     let myChart = new Chart(chartEl, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: dataX,
             datasets: [{
-                data: dataY,
-                lineTension: 0,
-                backgroundColor: 'transparent',
-                borderColor: '#007bff',
-                borderWidth: 4,
-                pointBackgroundColor: '#007bff'
-            }]
+                type: 'line',
+                fill: false,
+                backgroundColor: '#f80808',
+                borderColor: '#f80808',
+                borderDash: [5, 5],
+                data: dataAvgLine,
+            },
+                {
+                    type: 'bar',
+                    data: dataY,
+                    backgroundColor: '#007bff',
+                }]
         },
         options: {
+            responsive: true,
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: false
+                        beginAtZero: true
                     }
                 }]
             },
