@@ -1,22 +1,24 @@
 # Test task
-Test task for Skillbox
+Test task for Skillbox(with addon - front view)
 
 Student progress journal
 
 :link: [**DEMO**](https://psjournal.herokuapp.com/)
 
 ## Completion date 
-:heavy_check_mark: 14 February 2021
+:heavy_check_mark: 28 February 2021
 
 ## Technology stack
 - Java 8
-- Spring Boot
-- H2
+- Spring Boot(Web, Data JPA, Test), Hibernate
+- PostgreSQL
 - JUnit5
+- Lombok
+- JS, JQuery, Bootstrap5, Thymeleaf
 - OpenApi v3.0
+- Heroku
 
 ## Task
-
 Реализовать сервис — журнал успеваемости студентов. Есть группа студентов.
 Все они посещают одни и те же предметы, на которых получают оценки от 1 до 10.
 
